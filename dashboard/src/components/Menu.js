@@ -30,7 +30,7 @@ const Menu = () => {
       <div className="logo-section">
         <img src="logo.png" style={{ width: "35px" }} alt="Logo" />
       </div>
-      
+
       {/* Mobile Menu Button */}
       <button className="mobile-menu-btn" onClick={toggleMobileMenu}>
         {isMobileMenuOpen ? <CloseIcon /> : <MenuIcon />}
@@ -107,8 +107,38 @@ const Menu = () => {
           </li>
         </ul>
         <hr className="menu-divider" />
-        <div className="profile" onClick={handleProfileClick}>
+        <div className="profile" style={{ position: "relative" }} onClick={handleProfileClick}>
           <div className="avatar">Profile</div>
+          {isProfileDropdownOpen && (
+            <div className="profile-dropdown" style={{
+              position: 'absolute',
+              top: '50px',
+              right: '0',
+              background: '#fff',
+              border: '1px solid #ddd',
+              borderRadius: '4px',
+              padding: '10px 20px',
+              boxShadow: '0 4px 8px rgba(0,0,0,0.1)',
+              zIndex: 1000
+            }}>
+              <button 
+                onClick={() => {
+                  localStorage.removeItem("userEmail");
+                  window.location.href = "http://localhost:3003/";
+                }}
+                style={{
+                  background: 'none',
+                  border: 'none',
+                  color: '#df5148',
+                  cursor: 'pointer',
+                  fontWeight: 'bold',
+                  fontSize: '14px'
+                }}
+              >
+                Logout
+              </button>
+            </div>
+          )}
         </div>
       </div>
     </div>

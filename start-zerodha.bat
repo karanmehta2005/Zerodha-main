@@ -1,23 +1,18 @@
 @echo off
 echo ========================================================
-echo        Zerodha Full-Stack Developmental Script
+echo        Zerodha Production Boot Script
 echo ========================================================
 echo.
-echo [1/4] Terminating any old servers to clear port conflicts...
+echo [1/2] Terminating any old servers to clear port conflicts...
 taskkill /IM node.exe /F 2>nul
 
 echo.
-echo [2/4] Starting Backend (Port 3003)...
+echo [2/2] Starting Unified Server (Port 3003)...
 start cmd /k "cd backend && npm start"
 
 echo.
-echo [3/4] Starting Frontend (Port 3000)...
-start cmd /k "cd frontend && npm start"
-
+echo The integrated backend server is booting up!
+echo Automatically opening your browser...
+start http://localhost:3003
 echo.
-echo [4/4] Starting Dashboard (Port 3004)...
-start cmd /k "cd dashboard && npm start"
-
-echo.
-echo All three servers are booting up in separate background windows!
 echo You can safely close this orchestrator window.
