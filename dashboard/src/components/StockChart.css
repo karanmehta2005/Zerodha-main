@@ -1,0 +1,60 @@
+.chart-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(4px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 3000;
+}
+
+.chart-window {
+    width: 800px;
+    background: #131722;
+    border-radius: 12px;
+    box-shadow: 0 30px 60px rgba(0,0,0,0.4);
+    overflow: hidden;
+    animation: zoomIn 0.2s ease-out;
+    border: 1px solid #2a2e39;
+}
+
+.chart-window .window-header {
+    padding: 16px 24px;
+    background: #131722;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #2a2e39;
+}
+
+.chart-window .window-header h4 {
+    margin: 0;
+    color: #d1d4dc;
+    font-size: 1.1rem;
+    font-weight: 600;
+}
+
+.chart-window .close-btn {
+    background: transparent;
+    border: none;
+    color: #d1d4dc;
+    cursor: pointer;
+    padding: 4px;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    transition: background 0.2s;
+}
+
+.chart-window .close-btn:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.chart-container-wrapper {
+    padding: 0;
+    background: #131722;
+}

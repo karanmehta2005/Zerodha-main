@@ -1,0 +1,214 @@
+.sip-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(4px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 3000;
+}
+
+.sip-window {
+    width: 400px;
+    background: #fff;
+    border-radius: 16px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+    overflow: hidden;
+    animation: zoomIn 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+@keyframes zoomIn {
+    from { transform: scale(0.9); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+}
+
+.sip-window .window-header {
+    padding: 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.title-section {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.sip-bolt {
+    color: #4184f3;
+}
+
+.title-section h3 {
+    margin: 0;
+    font-size: 1.25rem;
+    color: #333;
+    font-weight: 700;
+}
+
+.sip-content {
+    padding: 24px;
+}
+
+.stock-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 24px;
+}
+
+.stock-uid {
+    font-weight: 700;
+    font-size: 1.1rem;
+    color: #444;
+}
+
+.ltp {
+    font-size: 0.9rem;
+    color: #888;
+}
+
+.field-group {
+    margin-bottom: 24px;
+}
+
+.field-group label {
+    display: block;
+    font-size: 0.85rem;
+    color: #666;
+    margin-bottom: 12px;
+    font-weight: 500;
+}
+
+.amount-input-container {
+    display: flex;
+    align-items: center;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 12px 16px;
+    transition: border-color 0.2s;
+}
+
+.amount-input-container:focus-within {
+    border-color: #4184f3;
+}
+
+.currency {
+    color: #999;
+    margin-right: 8px;
+    font-weight: 600;
+}
+
+.amount-input-container input {
+    border: none;
+    outline: none;
+    font-size: 1.25rem;
+    font-weight: 700;
+    width: 100%;
+    color: #333;
+}
+
+.suggestions {
+    display: flex;
+    gap: 8px;
+    margin-top: 10px;
+}
+
+.suggestions button {
+    padding: 6px 12px;
+    border: 1px solid #f0f0f0;
+    background: #f9f9f9;
+    border-radius: 12px;
+    font-size: 0.75rem;
+    color: #666;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.suggestions button:hover {
+    background: #eee;
+}
+
+.day-selector {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.day-selector input[type="range"] {
+    flex: 1;
+}
+
+.day-value {
+    background: #f0f4ff;
+    color: #4184f3;
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-weight: 700;
+    font-size: 0.9rem;
+    min-width: 45px;
+    text-align: center;
+}
+
+.sip-summary {
+    background: #fcfcfc;
+    border-radius: 12px;
+    padding: 16px;
+    border: 1px dashed #e0e0e0;
+}
+
+.sip-summary p {
+    margin: 8px 0;
+    font-size: 0.85rem;
+    color: #666;
+    display: flex;
+    justify-content: space-between;
+}
+
+.sip-summary strong {
+    color: #333;
+}
+
+.sip-window .window-footer {
+    padding: 24px;
+    background: #fdfdfd;
+    border-top: 1px solid #f0f0f0;
+    display: flex;
+    gap: 12px;
+}
+
+.btn-setup {
+    flex: 2;
+    background: #4184f3;
+    color: #fff;
+    border: none;
+    padding: 14px;
+    border-radius: 8px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.btn-setup:hover {
+    background: #3367d6;
+}
+
+.btn-secondary {
+    flex: 1;
+    background: #eee;
+    color: #666;
+    border: none;
+    padding: 14px;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.btn-secondary:hover {
+    background: #e0e0e0;
+}

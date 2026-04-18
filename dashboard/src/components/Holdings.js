@@ -1,0 +1,154 @@
+import React, { useState, useEffect, useContext } from "react";
+import axios, { all } from "axios";
+import { VerticalGraph } from "./VerticalGraph";
+import GeneralContext from "./GeneralContext";
+
+// import { holdings } from "../data/data";
+
+const Holdings = () => {
+  const [allHoldings, setAllHoldings] = useState([]);
+  const generalContext = useContext(GeneralContext);
+
+  useEffect(() => {
+    axios.get("/allHoldings").then((res) => {
+      setAllHoldings(res.data);
+    });
+  }, []);
+
+  const handleBuyClick = (stock) => {
+    generalContext.openBuyWindow(stock.name, stock.price);
+  };
+
+  const handleSellClick = (stock) => {
+    generalContext.openSellWindow(stock.name, stock.price);
+  };
+
+  // const labels = ['January', 'February', 'March', 'April', 'May', 'June', 'July'];
+  const labels = allHoldings.map((subArray) => subArray["name"]);
+
+  const data = {
+    labels,
+    datasets: [
+      {
+        label: "Stock Price",
+        data: allHoldings.map((stock) => stock.price),
+        backgroundColor: "rgba(255, 99, 132, 0.5)",
+      },
+    ],
+  };
+
+  // export const data = {
+  //   labels,
+  //   datasets: [
+  // {
+  //   label: 'Dataset 1',
+  //   data: labels.map(() => faker.datatype.number({ min: 0, max: 1000 })),
+  //   backgroundColor: 'rgba(255, 99, 132, 0.5)',
+  // },
+  //     {
+  //       label: 'Dataset 2',
+  //       data: labels.map(() => faker.datatype.number({ min: 0, max: 1000 })),
+  //       backgroundColor: 'rgba(53, 162, 235, 0.5)',
+  //     },
+  //   ],
+  // };
+
+  return (
+    <>
+      <h3 className="title">Holdings ({allHoldings.length})</h3>
+
+      <div className="order-table">
+        <table>
+          <thead>
+            <tr>
+              <th>Instrument</th>
+              <th>Qty.</th>
+              <th>Avg. cost</th>
+              <th>LTP</th>
+              <th>Cur. val</th>
+              <th>P&L</th>
+              <th>Net chg.</th>
+              <th>Day chg.</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {allHoldings.map((stock, index) => {
+              const curValue = stock.price * stock.qty;
+              const isProfit = curValue - stock.avg * stock.qty >= 0.0;
+              const profClass = isProfit ? "profit" : "loss";
+              const dayClass = stock.isLoss ? "loss" : "profit";
+
+              return (
+                <tr key={index}>
+                  <td>{stock.name}</td>
+                  <td>{stock.qty}</td>
+                  <td>{stock.avg.toFixed(2)}</td>
+                  <td>{stock.price.toFixed(2)}</td>
+                  <td>{curValue.toFixed(2)}</td>
+                  <td className={profClass}>
+                    {(curValue - stock.avg * stock.qty).toFixed(2)}
+                  </td>
+                  <td className={profClass}>{stock.net}</td>
+                  <td className={dayClass}>{stock.day}</td>
+                  <td>
+                    <button
+                      className="buy"
+                      style={{
+                        padding: "4px 8px",
+                        marginRight: "5px",
+                        fontSize: "12px",
+                        cursor: "pointer",
+                      }}
+                      onClick={() => handleBuyClick(stock)}
+                    >
+                      Buy
+                    </button>
+                    <button
+                      className="sell"
+                      style={{
+                        padding: "4px 8px",
+                        fontSize: "12px",
+                        cursor: "pointer",
+                      }}
+                      onClick={() => handleSellClick(stock)}
+                    >
+                      Sell
+                    </button>
+                  </td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+      </div>
+
+      <div className="row">
+        <div className="col">
+          <h5>
+            {allHoldings.reduce((acc, stock) => acc + stock.avg * stock.qty, 0).toFixed(2)}
+          </h5>
+          <p>Total investment</p>
+        </div>
+        <div className="col">
+          <h5>
+            {allHoldings.reduce((acc, stock) => acc + stock.price * stock.qty, 0).toFixed(2)}
+          </h5>
+          <p>Current value</p>
+        </div>
+        <div className="col">
+          <h5>
+            {(
+              allHoldings.reduce((acc, stock) => acc + stock.price * stock.qty, 0) -
+              allHoldings.reduce((acc, stock) => acc + stock.avg * stock.qty, 0)
+            ).toFixed(2)}
+          </h5>
+          <p>P&L</p>
+        </div>
+      </div>
+      <VerticalGraph data={data} />
+    </>
+  );
+};
+
+export default Holdings;

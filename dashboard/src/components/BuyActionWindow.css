@@ -1,0 +1,241 @@
+.order-window {
+    --radius: 12px;
+    width: 480px;
+    background: #fff;
+    position: fixed;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    cursor: move;
+    box-sizing: border-box;
+    z-index: 2000;
+    border-radius: var(--radius) var(--radius) 0 0;
+    box-shadow: 0 -10px 40px rgba(0,0,0,0.1);
+    border: none;
+    overflow: hidden;
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    animation: slideUp 0.3s ease-out;
+}
+
+@keyframes slideUp {
+    from { transform: translate(-50%, 100%); }
+    to { transform: translate(-50%, 0); }
+}
+
+.window-header {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 24px 24px 16px;
+    background: #fff;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.stock-titles h3 {
+    font-size: 1.4rem;
+    font-weight: 700;
+    margin: 0;
+    color: #444;
+}
+
+.stock-titles p {
+    font-size: 0.85rem;
+    color: #888;
+    margin: 4px 0 0;
+}
+
+.price-details h3 {
+    font-size: 1.4rem;
+    font-weight: 700;
+    margin: 0;
+    color: #388e3c; /* Default Green */
+}
+
+.price-details .price-change {
+    font-size: 0.85rem;
+    color: #666;
+    margin: 4px 0 0;
+}
+
+.market-depth-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+    padding: 16px 24px;
+    background: #fcfcfc;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.stat-col {
+    text-align: center;
+}
+
+.stat-col span {
+    font-size: 0.75rem;
+    color: #999;
+    text-transform: uppercase;
+    display: block;
+    margin-bottom: 4px;
+}
+
+.stat-col p {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: #444;
+    margin: 0;
+}
+
+.depth-table-container {
+    padding: 0 12px;
+}
+
+.depth-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.85rem;
+}
+
+.depth-table th {
+    padding: 12px 8px;
+    text-align: center;
+    color: #999;
+    font-weight: 500;
+    border-bottom: 1px solid #f5f5f5;
+}
+
+.depth-table td {
+    padding: 8px;
+    text-align: center;
+    color: #444;
+}
+
+.buy-text { color: #388e3c; }
+.sell-text { color: #df5148; }
+
+.total-row {
+    background: #f9f9f9;
+    font-weight: 600;
+    color: #333;
+}
+
+.order-form {
+    padding: 24px;
+}
+
+.input-group {
+    display: flex;
+    gap: 16px;
+}
+
+.input-group fieldset {
+    flex: 1;
+    border: 1px solid #e0e0e0;
+    border-radius: 4px;
+    padding: 0 12px 8px;
+}
+
+.input-group legend {
+    font-size: 0.75rem;
+    color: #999;
+    padding: 0 4px;
+    margin-left: -4px;
+}
+
+.input-group input {
+    width: 100%;
+    border: none;
+    font-size: 1.1rem;
+    font-weight: 600;
+    padding: 4px 0;
+    color: #333;
+    outline: none;
+}
+
+.utility-actions {
+    display: flex;
+    gap: 12px;
+    padding: 0 24px 20px;
+}
+
+.btn-utility {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 8px;
+    border: 1px solid #f0f0f0;
+    background: #f9f9f9;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    color: #4184f3;
+    cursor: pointer;
+    font-weight: 500;
+}
+
+.window-footer {
+    display: flex;
+    align-items: center;
+    padding: 24px;
+    background: #fff;
+    border-top: 1px solid #f5f5f5;
+    gap: 24px;
+}
+
+.margin-container {
+    flex: 0 0 auto;
+}
+
+.margin-container .label {
+    font-size: 0.75rem;
+    color: #999;
+    margin: 0;
+}
+
+.margin-container .value {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: #333;
+    margin: 4px 0 0;
+}
+
+.main-actions {
+    flex: 1;
+    display: flex;
+    gap: 12px;
+}
+
+.main-actions button {
+    flex: 1;
+    padding: 14px 0;
+    border: none;
+    border-radius: 6px;
+    font-weight: 700;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.btn-buy {
+    background: #00897b;
+    color: #fff;
+}
+
+.btn-buy:hover { background: #00796b; }
+
+.btn-sell {
+    background: #df5148;
+    color: #fff;
+}
+
+.btn-sell:hover { background: #c23b32; }
+
+.btn-cancel {
+    background: #eee;
+    color: #666;
+}
+
+.btn-cancel:hover { background: #e0e0e0; }
+
+.text-right { text-align: right; }

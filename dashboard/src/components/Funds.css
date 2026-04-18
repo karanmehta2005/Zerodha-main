@@ -1,0 +1,190 @@
+.funds-container {
+    max-width: 650px;
+    margin: 0 auto;
+    background: #fff;
+    min-height: auto;
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    border-radius: 16px;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.05);
+    overflow: hidden;
+    margin-top: 20px;
+    margin-bottom: 80px;
+}
+
+.funds-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 20px;
+    background: #fff;
+    border-bottom: 2px solid #eef0f5;
+}
+
+.funds-header h4 {
+    margin: 0;
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #333;
+}
+
+.icon-btn {
+    background: #eef0f5;
+    border: none;
+    padding: 8px;
+    border-radius: 8px;
+    cursor: pointer;
+    color: #666;
+    display: flex;
+    align-items: center;
+}
+
+/* Hero Section */
+.funds-hero {
+    background: #fff;
+    padding: 40px 20px;
+    text-align: center;
+    border-bottom: 12px solid #f0f2f7;
+}
+
+.funds-hero .label {
+    font-size: 0.9rem;
+    color: #666;
+    margin-bottom: 12px;
+    display: block;
+}
+
+.funds-hero h2 {
+    font-size: 2.2rem;
+    font-weight: 800;
+    margin: 0 0 12px 0;
+    color: #111;
+}
+
+.funds-hero .timestamp {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    font-size: 0.75rem;
+    color: #888;
+    margin-bottom: 24px;
+}
+
+.funds-actions {
+    display: flex;
+    gap: 16px;
+    justify-content: center;
+    margin-bottom: 24px;
+}
+
+.funds-btn {
+    flex: 1;
+    max-width: 160px;
+    padding: 12px;
+    border-radius: 6px;
+    font-weight: 700;
+    font-size: 0.85rem;
+    cursor: pointer;
+    text-transform: uppercase;
+    transition: all 0.2s;
+}
+
+.btn-withdraw {
+    background: #fff;
+    color: #4184f3;
+    border: 1.5px solid #4184f3;
+}
+
+.btn-add {
+    background: #4184f3;
+    color: #fff;
+    border: none;
+}
+
+.funds-history-link {
+    display: block;
+    color: #4184f3;
+    font-size: 0.85rem;
+    font-weight: 700;
+    text-decoration: none;
+    text-transform: uppercase;
+}
+
+/* Detail Section */
+.funds-details {
+    background: #fff;
+}
+
+.detail-group {
+    border-bottom: 8px solid #f0f2f7;
+}
+
+.detail-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 18px 20px;
+    border-bottom: 1px solid #f1f3f8;
+}
+
+.detail-item:last-child {
+    border-bottom: none;
+}
+
+.detail-label {
+    font-size: 0.95rem;
+    color: #333;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.detail-value {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #111;
+}
+
+.detail-value.positive { color: #00897b; }
+.detail-value.negative { color: #df5148; }
+
+.info-icon {
+    color: #ccc;
+    font-size: 1rem;
+}
+
+/* Modal Overlay (Simplified) */
+.transaction-modal {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: #fff;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+    z-index: 3000;
+    width: 320px;
+    text-align: center;
+}
+
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0,0,0,0.5);
+    z-index: 2999;
+}
+
+.transaction-modal input {
+    width: 100%;
+    padding: 12px;
+    font-size: 1.2rem;
+    margin: 20px 0;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    text-align: center;
+}
