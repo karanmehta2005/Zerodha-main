@@ -31,6 +31,7 @@ const BuyActionWindow = ({ uid, price }) => {
         qty: stockQuantity,
         price: stockPrice,
         mode: "BUY",
+        user: localStorage.getItem("userEmail") || "default",
       });
       generalContext.closeBuyWindow();
     } catch (err) {

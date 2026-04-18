@@ -356,31 +356,34 @@ app.get("/addPositions", async (req, res) => {
 
 app.get("/allHoldings", async (req, res) => {
   console.log("GET /allHoldings");
+  let userEmail = req.query.user || "default";
   if (isMock) {
     console.log("Returning mock holdings");
     return res.json(mockHoldings);
   }
-  let allHoldings = await HoldingsModel.find({});
+  let allHoldings = await HoldingsModel.find({ user: userEmail });
   res.json(allHoldings);
 });
 
 app.get("/allPositions", async (req, res) => {
   console.log("GET /allPositions");
+  let userEmail = req.query.user || "default";
   if (isMock) {
     console.log("Returning mock positions");
     return res.json(mockPositions);
   }
-  let allPositions = await PositionsModel.find({});
+  let allPositions = await PositionsModel.find({ user: userEmail });
   res.json(allPositions);
 });
 
 app.get("/allOrders", async (req, res) => {
   console.log("GET /allOrders");
+  let userEmail = req.query.user || "default";
   if (isMock) {
     console.log("Returning mock orders");
     return res.json(mockOrders);
   }
-  let allOrders = await OrdersModel.find({});
+  let allOrders = await OrdersModel.find({ user: userEmail });
   res.json(allOrders);
 });
 
@@ -460,17 +463,18 @@ app.post("/newOrder", async (req, res) => {
     }
 
 
-    let newOrder = new OrdersModel({ name, qty, price, mode });
+    let userEmail = req.body.user || "default";
+    let newOrder = new OrdersModel({ name, qty, price, mode, user: userEmail });
 
     await newOrder.save();
 
     // Update Holdings
-    let existingHolding = await HoldingsModel.findOne({ name });
+    let existingHolding = await HoldingsModel.findOne({ name, user: userEmail });
     if (mode === "BUY") {
       if (existingHolding) {
         let newQty = existingHolding.qty + Number(qty);
         let newAvg = (existingHolding.avg * existingHolding.qty + Number(price) * Number(qty)) / newQty;
-        await HoldingsModel.updateOne({ name }, { qty: newQty, avg: newAvg, price: Number(price) });
+        await HoldingsModel.updateOne({ _id: existingHolding._id }, { qty: newQty, avg: newAvg, price: Number(price) });
       } else {
         let newHolding = new HoldingsModel({
           name,
@@ -479,6 +483,7 @@ app.post("/newOrder", async (req, res) => {
           price: Number(price),
           net: "+0.00%",
           day: "+0.00%",
+          user: userEmail,
         });
         await newHolding.save();
       }
@@ -486,19 +491,19 @@ app.post("/newOrder", async (req, res) => {
       if (existingHolding) {
         let newQty = existingHolding.qty - Number(qty);
         if (newQty <= 0) {
-          await HoldingsModel.deleteOne({ name });
+          await HoldingsModel.deleteOne({ _id: existingHolding._id });
         } else {
-          await HoldingsModel.updateOne({ name }, { qty: newQty });
+          await HoldingsModel.updateOne({ _id: existingHolding._id }, { qty: newQty });
         }
       }
     }
 
     // Update Positions (Intraday)
-    let existingPosition = await PositionsModel.findOne({ name });
+    let existingPosition = await PositionsModel.findOne({ name, user: userEmail });
     if (mode === "BUY") {
       if (existingPosition) {
         let newQty = existingPosition.qty + Number(qty);
-        await PositionsModel.updateOne({ name }, { qty: newQty, price: Number(price) });
+        await PositionsModel.updateOne({ _id: existingPosition._id }, { qty: newQty, price: Number(price) });
       } else {
         let newPosition = new PositionsModel({
           product: "CNC",
@@ -509,6 +514,7 @@ app.post("/newOrder", async (req, res) => {
           net: "+0.00%",
           day: "+0.00%",
           isLoss: false,
+          user: userEmail,
         });
         await newPosition.save();
       }
@@ -516,9 +522,9 @@ app.post("/newOrder", async (req, res) => {
       if (existingPosition) {
         let newQty = existingPosition.qty - Number(qty);
         if (newQty <= 0) {
-          await PositionsModel.deleteOne({ name });
+          await PositionsModel.deleteOne({ _id: existingPosition._id });
         } else {
-          await PositionsModel.updateOne({ name }, { qty: newQty });
+          await PositionsModel.updateOne({ _id: existingPosition._id }, { qty: newQty });
         }
       }
     }
@@ -555,12 +561,7 @@ app.post("/signup", async (req, res) => {
     }
 
 
-    if (!isMock) {
-      // Auto-cleanup on signup
-      await HoldingsModel.deleteMany({});
-      await PositionsModel.deleteMany({});
-      await OrdersModel.deleteMany({});
-    }
+    // Auto-cleanup removed to maintain per-user data
 
 
     res.status(201).json({ message: "User signed up successfully!" });
@@ -600,12 +601,7 @@ app.post("/login", async (req, res) => {
       return res.status(400).json({ error: "Invalid password" });
     }
 
-    if (!isMock) {
-      // Auto-cleanup on login
-      await HoldingsModel.deleteMany({});
-      await PositionsModel.deleteMany({});
-      await OrdersModel.deleteMany({});
-    }
+    // Auto-cleanup removed to maintain per-user data
 
 
     console.log("Login successful for:", email);

@@ -10,7 +10,8 @@ const Holdings = () => {
   const generalContext = useContext(GeneralContext);
 
   useEffect(() => {
-    axios.get("/allHoldings").then((res) => {
+    const userEmail = localStorage.getItem("userEmail") || "default";
+    axios.get("/allHoldings", { params: { user: userEmail } }).then((res) => {
       setAllHoldings(res.data);
     });
   }, []);

@@ -24,6 +24,7 @@ function Login() {
       const data = await response.json();
 
       if (response.ok) {
+        localStorage.setItem("userEmail", formData.email);
         window.location.href = "/dashboard";
       } else {
         alert(data.error || "Login failed. Please try again.");

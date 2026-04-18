@@ -5,7 +5,8 @@ const Positions = () => {
   const [allPositions, setAllPositions] = useState([]);
 
   useEffect(() => {
-    axios.get("/allPositions").then((res) => {
+    const userEmail = localStorage.getItem("userEmail") || "default";
+    axios.get("/allPositions", { params: { user: userEmail } }).then((res) => {
       setAllPositions(res.data);
     });
   }, []);

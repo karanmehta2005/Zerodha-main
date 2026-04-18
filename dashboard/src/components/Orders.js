@@ -5,7 +5,8 @@ const Orders = () => {
   const [allOrders, setAllOrders] = useState([]);
 
   useEffect(() => {
-    axios.get("/allOrders").then((res) => {
+    const userEmail = localStorage.getItem("userEmail") || "default";
+    axios.get("/allOrders", { params: { user: userEmail } }).then((res) => {
       setAllOrders(res.data);
     });
   }, []);

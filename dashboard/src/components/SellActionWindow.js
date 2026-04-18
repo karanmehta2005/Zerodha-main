@@ -28,6 +28,7 @@ const SellActionWindow = ({ uid, price }) => {
         qty: stockQuantity,
         price: stockPrice,
         mode: "SELL",
+        user: localStorage.getItem("userEmail") || "default",
       });
       generalContext.closeSellWindow();
     } catch (err) {
