@@ -5,6 +5,8 @@ import SendIcon from "@mui/icons-material/Send";
 import SmartToyIcon from "@mui/icons-material/SmartToy";
 import "./AIChatBot.css";
 
+import robotImg from "./friendly_ai_robot_assistant.png";
+
 const AIChatBot = () => {
     const [messages, setMessages] = useState([
         { id: 1, text: "Welcome to Zerodha! I'm your intelligent trade companion. Whether you're a first-time visitor or a pro, I'm here to help you find the best stocks and navigate your dashboard. How can I assist you today?", sender: "ai" }
@@ -72,7 +74,7 @@ const AIChatBot = () => {
                     <h1>Intelligent Trading, Simplified.</h1>
                     <p>I assist you in real-time to find market opportunities and manage your wealth like a pro.</p>
                     <div className="robot-wrapper">
-                        <img src={`${process.env.PUBLIC_URL}/friendly_ai_robot_assistant_1776161745894.png`} alt="AI Robot" className="ai-robot-img" />
+                        <img src={robotImg} alt="AI Robot" className="ai-robot-img" />
                     </div>
                 </div>
             </div>
