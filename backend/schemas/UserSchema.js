@@ -15,6 +15,10 @@ const UserSchema = new Schema({
     type: String,
     required: true,
   },
+  funds: {
+    type: Number,
+    default: 50000,
+  },
 });
 
 module.exports = { UserSchema };

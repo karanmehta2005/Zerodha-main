@@ -33,6 +33,8 @@ const SellActionWindow = ({ uid, price }) => {
       generalContext.closeSellWindow();
     } catch (err) {
       console.error("Sell order error:", err);
+      const errorMessage = err.response?.data?.message || err.response?.data?.error || err.response?.data || "Error processing sell order";
+      alert(typeof errorMessage === "string" ? errorMessage : "Error processing sell order");
     }
   };
 

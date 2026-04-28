@@ -34,6 +34,7 @@ const mockHoldings = [
     price: 541.15,
     net: "+0.58%",
     day: "+2.99%",
+    user: "default",
   },
   {
     name: "HDFCBANK",
@@ -42,6 +43,7 @@ const mockHoldings = [
     price: 1522.35,
     net: "+10.04%",
     day: "+0.11%",
+    user: "default",
   },
   {
     name: "HINDUNILVR",
@@ -50,6 +52,7 @@ const mockHoldings = [
     price: 2417.4,
     net: "+3.49%",
     day: "+0.21%",
+    user: "default",
   },
   {
     name: "INFY",
@@ -59,6 +62,7 @@ const mockHoldings = [
     net: "+15.18%",
     day: "-1.60%",
     isLoss: true,
+    user: "default",
   },
   {
     name: "ITC",
@@ -67,6 +71,7 @@ const mockHoldings = [
     price: 207.9,
     net: "+2.92%",
     day: "+0.80%",
+    user: "default",
   },
   {
     name: "KPITTECH",
@@ -75,6 +80,7 @@ const mockHoldings = [
     price: 266.45,
     net: "+6.45%",
     day: "+3.54%",
+    user: "default",
   },
   {
     name: "M&M",
@@ -84,6 +90,7 @@ const mockHoldings = [
     net: "-3.72%",
     day: "-0.01%",
     isLoss: true,
+    user: "default",
   },
   {
     name: "RELIANCE",
@@ -92,6 +99,7 @@ const mockHoldings = [
     price: 2112.4,
     net: "-3.71%",
     day: "+1.44%",
+    user: "default",
   },
   {
     name: "SBIN",
@@ -101,6 +109,7 @@ const mockHoldings = [
     net: "+32.63%",
     day: "-0.34%",
     isLoss: true,
+    user: "default",
   },
   {
     name: "SGBMAY29",
@@ -109,6 +118,7 @@ const mockHoldings = [
     price: 4719.0,
     net: "-0.17%",
     day: "+0.15%",
+    user: "default",
   },
   {
     name: "TATAPOWER",
@@ -118,6 +128,7 @@ const mockHoldings = [
     net: "+19.15%",
     day: "-0.24%",
     isLoss: true,
+    user: "default",
   },
   {
     name: "TCS",
@@ -127,6 +138,7 @@ const mockHoldings = [
     net: "+5.03%",
     day: "-0.25%",
     isLoss: true,
+    user: "default",
   },
   {
     name: "WIPRO",
@@ -135,6 +147,7 @@ const mockHoldings = [
     price: 577.75,
     net: "+18.08%",
     day: "+0.32%",
+    user: "default",
   },
 ];
 const mockPositions = [
@@ -147,6 +160,7 @@ const mockPositions = [
     net: "+0.58%",
     day: "-1.24%",
     isLoss: true,
+    user: "default",
   },
   {
     product: "CNC",
@@ -157,6 +171,7 @@ const mockPositions = [
     net: "+10.04%",
     day: "-1.35%",
     isLoss: true,
+    user: "default",
   },
 ];
 const mockOrders = [];
@@ -359,7 +374,7 @@ app.get("/allHoldings", async (req, res) => {
   let userEmail = req.query.user || "default";
   if (isMock) {
     console.log("Returning mock holdings");
-    return res.json(mockHoldings);
+    return res.json(mockHoldings.filter(h => h.user === userEmail));
   }
   let allHoldings = await HoldingsModel.find({ user: userEmail });
   res.json(allHoldings);
@@ -370,7 +385,7 @@ app.get("/allPositions", async (req, res) => {
   let userEmail = req.query.user || "default";
   if (isMock) {
     console.log("Returning mock positions");
-    return res.json(mockPositions);
+    return res.json(mockPositions.filter(p => p.user === userEmail));
   }
   let allPositions = await PositionsModel.find({ user: userEmail });
   res.json(allPositions);
@@ -381,10 +396,79 @@ app.get("/allOrders", async (req, res) => {
   let userEmail = req.query.user || "default";
   if (isMock) {
     console.log("Returning mock orders");
-    return res.json(mockOrders);
+    return res.json(mockOrders.filter(o => o.user === userEmail));
   }
   let allOrders = await OrdersModel.find({ user: userEmail });
   res.json(allOrders);
+});
+
+app.get("/userFunds", async (req, res) => {
+  console.log("GET /userFunds");
+  let userEmail = req.query.user || "default";
+  if (isMock) {
+    let user = mockUsers.find(u => u.email === userEmail);
+    if (!user) {
+      user = { email: userEmail, funds: 50000 };
+      mockUsers.push(user);
+    }
+    return res.json({ funds: user.funds });
+  }
+  let user = await UserModel.findOne({ email: userEmail });
+  if (!user) {
+    if (userEmail === "default") {
+      user = new UserModel({ username: "default", email: "default", password: "password", funds: 50000 });
+      await user.save();
+    } else {
+      return res.status(404).json({ error: "User not found" });
+    }
+  }
+  if (user.funds === undefined || isNaN(user.funds)) {
+    user.funds = 50000;
+    await user.save();
+  }
+  res.json({ funds: user.funds });
+});
+
+app.post("/updateFunds", async (req, res) => {
+  try {
+    const { user: userEmail, amount } = req.body;
+    const emailToUse = userEmail || "default";
+    const numAmount = Number(amount);
+
+    if (isMock) {
+      let user = mockUsers.find(u => u.email === emailToUse);
+      if (!user) {
+        user = { email: emailToUse, funds: 50000 };
+        mockUsers.push(user);
+      }
+      if (numAmount < 0 && user.funds < Math.abs(numAmount)) {
+        return res.status(400).json({ error: "Insufficient funds!" });
+      }
+      user.funds += numAmount;
+      return res.json({ message: "Funds updated successfully", funds: user.funds });
+    }
+
+    let user = await UserModel.findOne({ email: emailToUse });
+    if (!user) {
+      if (emailToUse === "default") {
+        user = new UserModel({ username: "default", email: "default", password: "password", funds: 50000 });
+      } else {
+        return res.status(404).json({ error: "User not found" });
+      }
+    }
+    if (user.funds === undefined || isNaN(user.funds)) user.funds = 50000;
+
+    if (numAmount < 0 && user.funds < Math.abs(numAmount)) {
+      return res.status(400).json({ error: "Insufficient funds!" });
+    }
+
+    user.funds += numAmount;
+    await user.save();
+    res.json({ message: "Funds updated successfully", funds: user.funds });
+  } catch (error) {
+    console.error("Error updating funds:", error);
+    res.status(500).json({ error: "Error updating funds" });
+  }
 });
 
 
@@ -395,16 +479,40 @@ app.post("/newOrder", async (req, res) => {
     console.log("New order:", { name, qty, price, mode });
 
     if (isMock) {
+      let userEmail = req.body.user || "default";
+      let user = mockUsers.find(u => u.email === userEmail);
+      if (!user) {
+        user = { email: userEmail, funds: 50000 };
+        mockUsers.push(user);
+      }
+
+      const totalValue = Number(qty) * Number(price);
+
+      if (mode === "BUY") {
+        if (user.funds < totalValue) {
+          return res.status(400).json({ message: "Insufficient funds!", status: "error" });
+        }
+        user.funds -= totalValue;
+      } else if (mode === "SELL") {
+        user.funds += totalValue;
+      }
+
+      // Update mock holdings
+      let existingHolding = mockHoldings.find(h => h.name === name && h.user === userEmail);
+      
+      let pnl = 0;
+      if (mode === "SELL" && existingHolding) {
+        pnl = (Number(price) - existingHolding.avg) * Number(qty);
+      }
+
       mockOrders.push({
         name,
         qty: Number(qty),
         price: Number(price),
-        mode
+        mode,
+        user: userEmail,
+        pnl
       });
-
-
-      // Update mock holdings
-      let existingHolding = mockHoldings.find(h => h.name === name);
       if (mode === "BUY") {
         if (existingHolding) {
           let newQty = existingHolding.qty + Number(qty);
@@ -419,6 +527,7 @@ app.post("/newOrder", async (req, res) => {
             price: Number(price),
             net: "+0.00%",
             day: "+0.00%",
+            user: userEmail
           });
         }
       } else if (mode === "SELL") {
@@ -432,7 +541,7 @@ app.post("/newOrder", async (req, res) => {
       }
 
       // Update mock positions (simplified)
-      let existingPosition = mockPositions.find(p => p.name === name);
+      let existingPosition = mockPositions.find(p => p.name === name && p.user === userEmail);
       if (mode === "BUY") {
         if (existingPosition) {
           existingPosition.qty += Number(qty);
@@ -447,6 +556,7 @@ app.post("/newOrder", async (req, res) => {
             net: "+0.00%",
             day: "+0.00%",
             isLoss: false,
+            user: userEmail
           });
         }
       } else if (mode === "SELL") {
@@ -459,17 +569,44 @@ app.post("/newOrder", async (req, res) => {
         }
       }
 
-      return res.status(200).json({ message: "Order processed (Mock Mode)!", status: "success" });
+      return res.status(200).json({ message: "Order processed (Mock Mode)!", status: "success", funds: user.funds });
     }
 
 
     let userEmail = req.body.user || "default";
-    let newOrder = new OrdersModel({ name, qty, price, mode, user: userEmail });
+    let user = await UserModel.findOne({ email: userEmail });
+    if (!user) {
+      if (userEmail === "default") {
+        user = new UserModel({ username: "default", email: "default", password: "password", funds: 50000 });
+      } else {
+        return res.status(404).json({ error: "User not found" });
+      }
+    }
+    
+    if (user.funds === undefined || isNaN(user.funds)) user.funds = 50000;
+
+    const totalValue = Number(qty) * Number(price);
+
+    if (mode === "BUY") {
+      if (user.funds < totalValue) {
+        return res.status(400).send("Insufficient funds!");
+      }
+      user.funds -= totalValue;
+    } else if (mode === "SELL") {
+      user.funds += totalValue;
+    }
+    await user.save();
+
+    let existingHolding = await HoldingsModel.findOne({ name, user: userEmail });
+    
+    let pnl = 0;
+    if (mode === "SELL" && existingHolding) {
+      pnl = (Number(price) - existingHolding.avg) * Number(qty);
+    }
+
+    let newOrder = new OrdersModel({ name, qty, price, mode, user: userEmail, pnl });
 
     await newOrder.save();
-
-    // Update Holdings
-    let existingHolding = await HoldingsModel.findOne({ name, user: userEmail });
     if (mode === "BUY") {
       if (existingHolding) {
         let newQty = existingHolding.qty + Number(qty);
@@ -552,10 +689,10 @@ app.post("/signup", async (req, res) => {
     if (isMock) {
       if (mockUsers.find(u => u.username === username)) return res.status(400).json({ error: "Username already exists" });
       if (mockUsers.find(u => u.email === email)) return res.status(400).json({ error: "Email already exists" });
-      mockUsers.push({ username, email, password });
+      mockUsers.push({ username, email, password, funds: 50000 });
       console.log("User saved to mock successfully");
     } else {
-      const newUser = new UserModel({ username, email, password });
+      const newUser = new UserModel({ username, email, password, funds: 50000 });
       await newUser.save();
       console.log("User saved successfully");
     }
@@ -601,8 +738,14 @@ app.post("/login", async (req, res) => {
       return res.status(400).json({ error: "Invalid password" });
     }
 
-    // Auto-cleanup removed to maintain per-user data
-
+    // Clear orders on login as requested
+    if (isMock) {
+      const remainingOrders = mockOrders.filter(o => o.user !== email);
+      mockOrders.length = 0;
+      mockOrders.push(...remainingOrders);
+    } else {
+      await OrdersModel.deleteMany({ user: email });
+    }
 
     console.log("Login successful for:", email);
     res.status(200).json({ message: "Login successful!" });

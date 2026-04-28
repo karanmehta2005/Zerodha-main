@@ -264,7 +264,48 @@
     border-radius: 12px;
     border: 1px solid #f0f0f0;
     position: relative;
+    overflow: hidden; /* For overlay actions */
 }
+
+.stock-card-actions {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    position: absolute;
+    bottom: -50px;
+    left: 0;
+    width: 100%;
+    background: rgba(255, 255, 255, 0.95);
+    padding: 12px 8px;
+    transition: bottom 0.3s ease;
+    border-top: 1px solid #f0f0f0;
+}
+
+.stock-card:hover .stock-card-actions {
+    bottom: 0;
+}
+
+.stock-card-btn {
+    border: none;
+    background: none;
+    cursor: pointer;
+    font-size: 0.85rem;
+    font-weight: 700;
+    padding: 4px 8px;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.stock-card-btn:hover {
+    background: #f1f3f6;
+}
+
+.stock-card-btn.buy { color: #4184f3; }
+.stock-card-btn.sell { color: #df5148; }
+.stock-card-btn.chart { color: #666; }
+.stock-card-btn.more { color: #666; }
 
 .stock-card .more-btn {
     position: absolute;

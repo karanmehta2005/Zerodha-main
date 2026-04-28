@@ -36,6 +36,8 @@ const BuyActionWindow = ({ uid, price }) => {
       generalContext.closeBuyWindow();
     } catch (err) {
       console.error("Buy order error:", err);
+      const errorMessage = err.response?.data?.message || err.response?.data?.error || err.response?.data || "Insufficient fund";
+      alert(typeof errorMessage === "string" ? errorMessage : "Insufficient fund");
     }
   };
 

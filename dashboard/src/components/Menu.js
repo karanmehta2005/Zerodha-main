@@ -28,7 +28,7 @@ const Menu = () => {
   return (
     <div className="menu-container">
       <div className="logo-section">
-        <img src="logo.png" style={{ width: "35px" }} alt="Logo" />
+        <img src={`${process.env.PUBLIC_URL}/logo.png`} style={{ width: "35px" }} alt="Logo" />
       </div>
 
       {/* Mobile Menu Button */}
@@ -94,17 +94,6 @@ const Menu = () => {
               </p>
             </Link>
           </li>
-          <li>
-            <Link
-              style={{ textDecoration: "none" }}
-              to="/apps"
-              onClick={() => handleMenuClick(6)}
-            >
-              <p className={selectedMenu === 6 ? activeMenuClass : menuClass}>
-                Apps
-              </p>
-            </Link>
-          </li>
         </ul>
         <hr className="menu-divider" />
         <div className="profile" style={{ position: "relative" }} onClick={handleProfileClick}>
@@ -121,6 +110,10 @@ const Menu = () => {
               boxShadow: '0 4px 8px rgba(0,0,0,0.1)',
               zIndex: 1000
             }}>
+              <div style={{ paddingBottom: "10px", borderBottom: "1px solid #eee", marginBottom: "10px", display: "flex", flexDirection: "column", gap: "8px" }}>
+                <Link to="/reports/pnl" onClick={() => setIsProfileDropdownOpen(false)} style={{ textDecoration: "none", color: "#444", fontSize: "14px", fontWeight: "500" }}>P&L Report</Link>
+                <Link to="/reports/holdings" onClick={() => setIsProfileDropdownOpen(false)} style={{ textDecoration: "none", color: "#444", fontSize: "14px", fontWeight: "500" }}>Holdings Report</Link>
+              </div>
               <button 
                 onClick={() => {
                   localStorage.removeItem("userEmail");

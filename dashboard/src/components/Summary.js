@@ -7,10 +7,21 @@ import CardGiftcardIcon from '@mui/icons-material/CardGiftcard';
 import PersonAddAlt1Icon from '@mui/icons-material/PersonAddAlt1';
 import AccountBalanceIcon from '@mui/icons-material/AccountBalance';
 import AIChatBot from "./AIChatBot";
+import GeneralContext from "./GeneralContext";
+import BarChartOutlinedIcon from '@mui/icons-material/BarChartOutlined';
+import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import "./Summary.css";
 
 const Summary = () => {
     const [allHoldings, setAllHoldings] = useState([]);
+    const generalContext = React.useContext(GeneralContext);
+
+    const interestedStocks = [
+        { symbol: "HSCL", price: 470.55, change: "-0.35 (-0.07%)", isUp: false, color: "#ff6b6b", logo: "HS" },
+        { symbol: "BAJAJ-AUTO", price: 9816.00, change: "+2.50 (+0.03%)", isUp: true, color: "#4184f3", logo: "BA" },
+        { symbol: "RELIANCE", price: 2112.40, change: "+14.50 (+0.69%)", isUp: true, color: "#52b788", logo: "RE" },
+        { symbol: "TCS", price: 3194.80, change: "-22.30 (-0.69%)", isUp: false, color: "#6d597a", logo: "TC" }
+    ];
 
     useEffect(() => {
         axios.get("/allHoldings").then((res) => {
@@ -25,7 +36,7 @@ const Summary = () => {
             {/* Top Actions - Search Removed */}
             <div className="summary-header">
                 <div className="icon-products">
-                    <img src="logo.png" style={{ width: "24px", opacity: 0.6 }} alt="Products" />
+                    <img src={`${process.env.PUBLIC_URL}/logo.png`} style={{ width: "24px", opacity: 0.6 }} alt="Products" />
                 </div>
                 <div className="profile-btn">
                     <div className="avatar-sm">Profile</div>
@@ -59,6 +70,22 @@ const Summary = () => {
                         </div>
                         <span className="market-expiry">Expiry Tue</span>
                         <p className="market-change">-207.00 (-0.88%)</p>
+                    </div>
+                    <div className="market-card">
+                        <div className="market-row">
+                            <span className="name">BANKNIFTY</span>
+                            <span className="price up">49,850.40 ▲</span>
+                        </div>
+                        <span className="market-expiry">Expiry Wed</span>
+                        <p className="market-change">+145.20 (+0.29%)</p>
+                    </div>
+                    <div className="market-card">
+                        <div className="market-row">
+                            <span className="name">NIFTY 100</span>
+                            <span className="price down">24,105.20 ▼</span>
+                        </div>
+                        <span className="market-expiry">Expiry Thu</span>
+                        <p className="market-change">-180.50 (-0.74%)</p>
                     </div>
                 </div>
             </div>
@@ -104,42 +131,28 @@ const Summary = () => {
                     <div className="pill">Last Viewed</div>
                 </div>
                 <div className="stock-grid">
-                    <div className="stock-card">
-                        <MoreVertIcon className="more-btn" fontSize="small" />
-                        <div className="logo" style={{ color: '#ff6b6b' }}>HS</div>
-                        <div className="symbol">HSCL</div>
-                        <div className="price-row">
-                            <span className="price down">₹470.55</span>
+                    {interestedStocks.map((stock, index) => (
+                        <div className="stock-card" key={index}>
+                            <MoreVertIcon className="more-btn" fontSize="small" />
+                            <div className="logo" style={{ color: stock.color }}>{stock.logo}</div>
+                            <div className="symbol">{stock.symbol}</div>
+                            <div className="price-row">
+                                <span className={`price ${stock.isUp ? 'up' : 'down'}`}>₹{stock.price.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</span>
+                            </div>
+                            <div className="change">{stock.change}</div>
+
+                            <div className="stock-card-actions">
+                                <button className="stock-card-btn buy" onClick={() => generalContext.openBuyWindow(stock.symbol, stock.price)}>Buy</button>
+                                <button className="stock-card-btn sell" onClick={() => generalContext.openSellWindow(stock.symbol, stock.price)}>Sell</button>
+                                <button className="stock-card-btn chart" onClick={() => generalContext.openChartWindow(stock.symbol, stock.price)}>
+                                    <BarChartOutlinedIcon fontSize="small" />
+                                </button>
+                                <button className="stock-card-btn more" onClick={() => generalContext.openSIPWindow(stock.symbol, stock.price)}>
+                                    <MoreHorizIcon fontSize="small" />
+                                </button>
+                            </div>
                         </div>
-                        <div className="change">-0.35 (-0.07%)</div>
-                    </div>
-                    <div className="stock-card">
-                        <MoreVertIcon className="more-btn" fontSize="small" />
-                        <div className="logo" style={{ color: '#4184f3' }}>BA</div>
-                        <div className="symbol">BAJAJ-AUTO</div>
-                        <div className="price-row">
-                            <span className="price up">₹9,816.00</span>
-                        </div>
-                        <div className="change">+2.50 (+0.03%)</div>
-                    </div>
-                    <div className="stock-card">
-                        <MoreVertIcon className="more-btn" fontSize="small" />
-                        <div className="logo" style={{ color: '#52b788' }}>RE</div>
-                        <div className="symbol">RELIANCE</div>
-                        <div className="price-row">
-                            <span className="price up">₹2,112.40</span>
-                        </div>
-                        <div className="change">+14.50 (+0.69%)</div>
-                    </div>
-                    <div className="stock-card">
-                        <MoreVertIcon className="more-btn" fontSize="small" />
-                        <div className="logo" style={{ color: '#6d597a' }}>TC</div>
-                        <div className="symbol">TCS</div>
-                        <div className="price-row">
-                            <span className="price down">₹3,194.80</span>
-                        </div>
-                        <div className="change">-22.30 (-0.69%)</div>
-                    </div>
+                    ))}
                 </div>
             </div>
         </div>

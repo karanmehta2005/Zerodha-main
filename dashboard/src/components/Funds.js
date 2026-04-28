@@ -1,33 +1,56 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
 import HistoryIcon from '@mui/icons-material/History';
 import InfoIcon from '@mui/icons-material/Info';
+import axios from "axios";
 import "./Funds.css";
 
 const Funds = () => {
-    const [balance, setBalance] = useState(46494.06);
-    const [lastUpdated] = useState(() => {
-        const now = new Date();
-        return now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: true }) + " on " + now.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
-    });
+    const [balance, setBalance] = useState(0);
+    const [amountUsed, setAmountUsed] = useState(0);
+    const [lastUpdated, setLastUpdated] = useState("");
 
     const [modal, setModal] = useState({ open: false, type: "" });
     const [amount, setAmount] = useState("");
 
-    const handleTransaction = () => {
+    const fetchFunds = async () => {
+        try {
+            const userEmail = localStorage.getItem("userEmail") || "default";
+            const res = await axios.get(`/userFunds?user=${userEmail}`);
+            setBalance(res.data.funds);
+            
+            // Fetch holdings to calculate amount used
+            const holdingsRes = await axios.get(`/allHoldings?user=${userEmail}`);
+            const totalUsed = holdingsRes.data.reduce((acc, stock) => acc + (stock.avg * stock.qty), 0);
+            setAmountUsed(totalUsed);
+
+            const now = new Date();
+            setLastUpdated(now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: true }) + " on " + now.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }));
+        } catch (err) {
+            console.error("Error fetching funds:", err);
+        }
+    };
+
+    useEffect(() => {
+        fetchFunds();
+    }, []);
+
+    const handleTransaction = async () => {
         const val = parseFloat(amount);
         if (isNaN(val) || val <= 0) return;
 
-        if (modal.type === "ADD") {
-            setBalance(prev => prev + val);
-        } else if (modal.type === "WITHDRAW") {
-            if (val > balance) {
-                alert("Insufficient funds!");
-                return;
-            }
-            setBalance(prev => prev - val);
+        try {
+            const userEmail = localStorage.getItem("userEmail") || "default";
+            await axios.post("/updateFunds", {
+                user: userEmail,
+                amount: modal.type === "ADD" ? val : -val
+            });
+            fetchFunds();
+        } catch (err) {
+            console.error("Error updating funds:", err);
+            alert(err.response?.data?.error || err.response?.data?.message || "Error processing transaction!");
         }
         setModal({ open: false, type: "" });
         setAmount("");
@@ -75,7 +98,7 @@ const Funds = () => {
                 <div className="detail-group">
                     <div className="detail-item">
                         <span className="detail-label">Amount Added</span>
-                        <span className="detail-value positive">₹{balance.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</span>
+                        <span className="detail-value positive">₹{(balance + amountUsed).toLocaleString('en-IN', { minimumFractionDigits: 2 })}</span>
                     </div>
                     <div className="detail-item">
                         <span className="detail-label">Free cash balance <InfoIcon className="info-icon" sx={{ fontSize: 16 }} /></span>
@@ -85,8 +108,8 @@ const Funds = () => {
 
                 <div className="detail-group">
                     <div className="detail-item">
-                        <span className="detail-label" style={{ fontWeight: 700 }}>Amount Used</span>
-                        <span className="detail-value negative">₹0.00</span>
+                        <span className="detail-label" style={{ fontWeight: 700 }}>Amount Used (Holdings)</span>
+                        <span className="detail-value negative">₹{amountUsed.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</span>
                     </div>
                 </div>
             </div>

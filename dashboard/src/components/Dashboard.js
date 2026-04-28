@@ -3,6 +3,8 @@ import { Route, Routes, useLocation } from "react-router-dom";
 
 import Apps from "./Apps";
 import Funds from "./Funds";
+import PnLReport from "./PnLReport";
+import HoldingsReport from "./HoldingsReport";
 
 import Orders from "./Orders";
 import Positions from "./Positions";
@@ -14,13 +16,13 @@ import { GeneralContextProvider } from "./GeneralContext";
 
 const Dashboard = () => {
   const location = useLocation();
-  const isFundsPage = location.pathname === "/funds";
+  const isFullWidthPage = location.pathname === "/funds" || location.pathname.startsWith("/reports");
 
   return (
     <GeneralContextProvider>
-      <div className={`dashboard-container ${isFundsPage ? "no-sidebar" : ""}`}>
-        {!isFundsPage && <WatchList />}
-        <div className={`content ${isFundsPage ? "full-width" : ""}`}>
+      <div className={`dashboard-container ${isFullWidthPage ? "no-sidebar" : ""}`}>
+        {!isFullWidthPage && <WatchList />}
+        <div className={`content ${isFullWidthPage ? "full-width" : ""}`}>
           <Routes>
             <Route exact path="/" element={<Summary />} />
             <Route path="/orders" element={<Orders />} />
@@ -28,6 +30,8 @@ const Dashboard = () => {
             <Route path="/positions" element={<Positions />} />
             <Route path="/funds" element={<Funds />} />
             <Route path="/apps" element={<Apps />} />
+            <Route path="/reports/pnl" element={<PnLReport />} />
+            <Route path="/reports/holdings" element={<HoldingsReport />} />
           </Routes>
         </div>
       </div>
