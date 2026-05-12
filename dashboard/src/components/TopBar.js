@@ -6,7 +6,9 @@ const TopBar = () => {
   return (
     <div className="topbar-container">
       <div className="topbar-left">
-           <img src="logo.png" style={{ width: "24px" }} alt="Logo" />
+           <span className="brand-logo-stylish" style={{ fontSize: "1.1rem" }}>
+             DHAN <span className="brand-accent">SETU</span>
+           </span>
       </div>
 
       <div className="topbar-right">

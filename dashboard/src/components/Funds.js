@@ -79,7 +79,7 @@ const Funds = () => {
                     <button className="funds-btn btn-add" onClick={() => setModal({ open: true, type: "ADD" })}>Add Funds</button>
                 </div>
 
-                <Link to="/history" className="funds-history-link">Transaction History</Link>
+
             </div>
 
             {/* Detailed Stats */}

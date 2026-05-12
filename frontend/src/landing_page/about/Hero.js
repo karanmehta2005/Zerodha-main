@@ -3,52 +3,27 @@ import React from "react";
 function Hero() {
   return (
     <div className="container">
-      <div className="row p-5 mt-5 mb-5">
-        <h1 className="fs-2 text-center">
-          We pioneered the discount broking model in India
-          <br />
-          Now, we are breaking ground with our technology.
-        </h1>
+      <div className="row p-5 mt-5 mb-5 text-center">
+        <h1 className="fs-1 fw-bold mb-4" style={{ color: "#023e8a" }}>About Us</h1>
+        <p className="fs-5 text-muted mx-auto" style={{ maxWidth: "800px", lineHeight: "1.8" }}>
+          We are focused on building intuitive and reliable financial technology solutions that simplify how users interact with the stock market. Our platform is designed to transform complex trading concepts into a smooth and easy-to-understand experience.
+        </p>
+        <p className="fs-5 text-muted mx-auto mt-3" style={{ maxWidth: "800px", lineHeight: "1.8" }}>
+          By combining modern technology with thoughtful design, we aim to create an environment where users can explore market trends, understand trading behavior, and engage with financial systems more confidently.
+        </p>
       </div>
 
-      <div
-        className="row p-5 mt-5 border-top text-muted"
-        style={{ lineHeight: "1.8", fontSize: "1.2em" }}
-      >
-        <div className="col-6 p-5">
-          <p>
-            We kick-started operations on the 15th of August, 2010 with the goal
-            of breaking all barriers that traders and investors face in India in
-            terms of cost, support, and technology. We named the company
-            Zerodha, a combination of Zero and "Rodha", the Sanskrit word for
-            barrier.
-          </p>
-          <p>
-            Today, our disruptive pricing models and in-house technology have
-            made us the biggest stock broker in India.
-          </p>
-          <p>
-            Over 1+ Crore clients place millions of orders every day through our
-            powerful ecosystem of investment platforms, contributing over 15% of
-            all Indian retail trading volumes.
+      <div className="row p-5 mt-5 border-top">
+        <div className="col-md-6 p-5">
+          <h2 className="fw-bold mb-4" style={{ color: "#06d6a0" }}>🎯 Our Mission</h2>
+          <p className="text-muted fs-5" style={{ lineHeight: "1.8" }}>
+            Our mission is to simplify financial complexity by creating smart and user-friendly digital solutions. We strive to make stock market concepts easier to understand, enabling users to learn, explore, and make informed decisions with confidence.
           </p>
         </div>
-        <div className="col-6 p-5">
-          <p>
-            In addition, we run a number of popular open online educational and
-            community initiatives to empower retail traders and investors.
-          </p>
-          <p>
-            <a href="" style={{ textDecoration: "none" }}>
-              Rainmatter
-            </a>
-            , our fintech fund and incubator, has invested in several fintech
-            startups with the goal of growing the Indian capital markets.
-          </p>
-          <p>
-            And yet, we are always up to something new every day. Catch up on
-            the latest updates on our blog or see what the media is saying about
-            us.
+        <div className="col-md-6 p-5">
+          <h2 className="fw-bold mb-4" style={{ color: "#0077b6" }}>🔮 Our Vision</h2>
+          <p className="text-muted fs-5" style={{ lineHeight: "1.8" }}>
+            Our vision is to build a future where financial systems are more accessible, transparent, and easy to understand. We aim to empower individuals with the knowledge and tools needed to confidently navigate the world of finance.
           </p>
         </div>
       </div>

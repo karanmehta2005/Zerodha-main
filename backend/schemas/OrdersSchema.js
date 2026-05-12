@@ -7,6 +7,7 @@ const OrdersSchema = new Schema({
   mode: String,
   user: String,
   pnl: { type: Number, default: 0 },
+  pnlPercent: { type: Number, default: 0 },
 });
 
 module.exports = { OrdersSchema };

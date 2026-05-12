@@ -7,9 +7,26 @@ const Positions = () => {
   useEffect(() => {
     const userEmail = localStorage.getItem("userEmail") || "default";
     axios.get("/allPositions", { params: { user: userEmail } }).then((res) => {
-      setAllPositions(res.data);
+      const initialPositions = res.data.map(stock => ({
+        ...stock,
+        price: stock.price * (1 + (Math.random() * 0.1 - 0.03))
+      }));
+      setAllPositions(initialPositions);
     });
   }, []);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setAllPositions(prevPositions => 
+        prevPositions.map(stock => ({
+          ...stock,
+          price: stock.price * (1 + (Math.random() * 0.004 - 0.002))
+        }))
+      );
+    }, 3000);
+
+    return () => clearInterval(interval);
+  }, [allPositions.length]);
 
   return (
     <>
@@ -25,6 +42,7 @@ const Positions = () => {
               <th>Avg.</th>
               <th>LTP</th>
               <th>P&L</th>
+              <th>P&L %</th>
               <th>Chg.</th>
             </tr>
           </thead>
@@ -44,6 +62,9 @@ const Positions = () => {
                   <td>{(stock.price || 0).toFixed(2)}</td>
                   <td className={profClass}>
                     {(curValue - stock.avg * stock.qty).toFixed(2)}
+                  </td>
+                  <td className={profClass}>
+                    {((stock.price - stock.avg) / (stock.avg || 1) * 100).toFixed(2)}%
                   </td>
                   <td className={dayClass}>{stock.day}</td>
                 </tr>

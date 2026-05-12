@@ -10,9 +10,9 @@ function ProductsPage() {
     <>
       <Hero />
       <LeftSection
-        imageURL="media/images/kite.png"
-        productName="Kite"
-        productDesription="Our ultra-fast flagship trading platform with streaming market data, advanced charts, an elegant UI, and more. Enjoy the Kite experience seamlessly on your Android and iOS devices."
+        imageURL="media/images/logo.png"
+        productName="Dhan Setu"
+        productDesription="Our ultra-fast flagship trading platform with streaming market data, advanced charts, an elegant UI, and more. Enjoy the Dhan Setu experience seamlessly on your Android and iOS devices."
         tryDemo=""
         learnMore=""
         googlePlay=""
@@ -21,7 +21,7 @@ function ProductsPage() {
       <RightSection
         imageURL="media/images/console.png"
         productName="Console"
-        productDesription="The central dashboard for your Zerodha account. Gain insights into your trades and investments with in-depth reports and visualisations."
+        productDesription="The central dashboard for your Dhan Setu account. Gain insights into your trades and investments with in-depth reports and visualisations."
         learnMore=""
       />
       <LeftSection
@@ -34,8 +34,8 @@ function ProductsPage() {
         appStore=""
       />
       <RightSection
-        imageURL="media/images/kiteconnect.png"
-        productName="Kite Connect API"
+        imageURL="media/images/logo.png"
+        productName="Dhan Setu Connect API"
         productDesription="Build powerful trading platforms and experiences with our super simple HTTP/JSON APIs. If you are a startup, build your investment app and showcase it to our clientbase."
         learnMore=""
       />
@@ -49,7 +49,7 @@ function ProductsPage() {
         appStore=""
       />
       <p className="text-center mt-5 mb-5">
-        Want to know more about our technology stack? Check out the Zerodha.tech
+        Want to know more about our technology stack? Check out the Dhan Setu.tech
         blog.
       </p>
       <Universe />

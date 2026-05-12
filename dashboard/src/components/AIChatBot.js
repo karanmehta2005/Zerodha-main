@@ -9,7 +9,7 @@ import robotImg from "./friendly_ai_robot_assistant.png";
 
 const AIChatBot = () => {
     const [messages, setMessages] = useState([
-        { id: 1, text: "Welcome to Zerodha! I'm your intelligent trade companion. Whether you're a first-time visitor or a pro, I'm here to help you find the best stocks and navigate your dashboard. How can I assist you today?", sender: "ai" }
+        { id: 1, text: "Welcome to Dhan Setu! I'm your intelligent trade companion. Whether you're a first-time visitor or a pro, I'm here to help you find the best stocks and navigate your dashboard. How can I assist you today?", sender: "ai" }
     ]);
     const [inputValue, setInputValue] = useState("");
     const [isTyping, setIsTyping] = useState(false);

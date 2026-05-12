@@ -542,3 +542,27 @@ body {
   font-size: 1.1rem;
   font-weight: 600;
 }
+
+/* Stylish Brand Logo */
+.brand-logo-stylish {
+  font-family: 'Inter', sans-serif;
+  font-weight: 800;
+  font-size: 1.4rem;
+  letter-spacing: -0.5px;
+  background: linear-gradient(135deg, #023e8a 0%, #0077b6 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  display: inline-block;
+  transition: transform 0.3s ease;
+  vertical-align: middle;
+}
+
+.brand-accent {
+  background: linear-gradient(135deg, #06d6a0 0%, #2ec4b6 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.brand-logo-stylish:hover {
+  transform: scale(1.05);
+}

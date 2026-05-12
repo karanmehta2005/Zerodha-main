@@ -1,6 +1,6 @@
 @echo off
 echo ========================================================
-echo        Zerodha Production Boot Script
+echo        Dhan Setu Production Boot Script
 echo ========================================================
 echo.
 echo [1/2] Terminating any old servers to clear port conflicts...

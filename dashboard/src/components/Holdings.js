@@ -12,9 +12,28 @@ const Holdings = () => {
   useEffect(() => {
     const userEmail = localStorage.getItem("userEmail") || "default";
     axios.get("/allHoldings", { params: { user: userEmail } }).then((res) => {
-      setAllHoldings(res.data);
+      // Initialize with slightly varied prices so P&L isn't always 0 initially
+      const initialHoldings = res.data.map(stock => ({
+        ...stock,
+        price: stock.price * (1 + (Math.random() * 0.1 - 0.03)) // -3% to +7% initial variation
+      }));
+      setAllHoldings(initialHoldings);
     });
   }, []);
+
+  // Simulate live price updates
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setAllHoldings(prevHoldings => 
+        prevHoldings.map(stock => ({
+          ...stock,
+          price: stock.price * (1 + (Math.random() * 0.004 - 0.002)) // -0.2% to +0.2% fluctuation
+        }))
+      );
+    }, 3000); // Update every 3 seconds
+
+    return () => clearInterval(interval);
+  }, [allHoldings.length]);
 
   const handleBuyClick = (stock) => {
     generalContext.openBuyWindow(stock.name, stock.price);
@@ -68,8 +87,7 @@ const Holdings = () => {
               <th>LTP</th>
               <th>Cur. val</th>
               <th>P&L</th>
-              <th>Net chg.</th>
-              <th>Day chg.</th>
+              <th>P&L %</th>
               <th>Actions</th>
             </tr>
           </thead>
@@ -90,8 +108,9 @@ const Holdings = () => {
                   <td className={profClass}>
                     {(curValue - stock.avg * stock.qty).toFixed(2)}
                   </td>
-                  <td className={profClass}>{stock.net}</td>
-                  <td className={dayClass}>{stock.day}</td>
+                  <td className={profClass}>
+                    {((stock.price - stock.avg) / stock.avg * 100).toFixed(2)}%
+                  </td>
                   <td>
                     <button
                       className="buy"
@@ -143,6 +162,9 @@ const Holdings = () => {
               allHoldings.reduce((acc, stock) => acc + stock.price * stock.qty, 0) -
               allHoldings.reduce((acc, stock) => acc + stock.avg * stock.qty, 0)
             ).toFixed(2)}
+            <span style={{ fontSize: "14px", marginLeft: "8px", fontWeight: "normal" }} className={(allHoldings.reduce((acc, stock) => acc + stock.price * stock.qty, 0) - allHoldings.reduce((acc, stock) => acc + stock.avg * stock.qty, 0)) >= 0 ? "profit" : "loss"}>
+              ({( (allHoldings.reduce((acc, stock) => acc + stock.price * stock.qty, 0) - allHoldings.reduce((acc, stock) => acc + stock.avg * stock.qty, 0)) / (allHoldings.reduce((acc, stock) => acc + stock.avg * stock.qty, 0) || 1) * 100 ).toFixed(2)}%)
+            </span>
           </h5>
           <p>P&L</p>
         </div>

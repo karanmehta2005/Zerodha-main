@@ -8,13 +8,11 @@ function Navbar() {
       style={{ backgroundColor: "#FFF" }}
     >
       <div className="container p-2">
-        <a className="navbar-brand" href="#">
-          <img
-            src="media/images/logo.svg"
-            style={{ width: "25%" }}
-            alt="Logo"
-          />
-        </a>
+        <Link className="navbar-brand" to="/" style={{ display: "flex", alignItems: "center", textDecoration: "none" }}>
+          <span className="brand-logo-stylish">
+            DHAN <span className="brand-accent">SETU</span>
+          </span>
+        </Link>
         <button
           className="navbar-toggler"
           type="button"

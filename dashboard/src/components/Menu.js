@@ -28,7 +28,11 @@ const Menu = () => {
   return (
     <div className="menu-container">
       <div className="logo-section">
-        <img src={`${process.env.PUBLIC_URL}/logo.png`} style={{ width: "35px" }} alt="Logo" />
+        <Link to="/" style={{ textDecoration: "none" }}>
+          <span className="brand-logo-stylish">
+            DHAN <span className="brand-accent">SETU</span>
+          </span>
+        </Link>
       </div>
 
       {/* Mobile Menu Button */}

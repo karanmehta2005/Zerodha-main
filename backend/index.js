@@ -174,7 +174,17 @@ const mockPositions = [
     user: "default",
   },
 ];
-const mockOrders = [];
+const mockOrders = [
+  { name: "INFY", qty: 20, price: 1633.22, mode: "SELL", user: "default", pnl: 3500.00, pnlPercent: 12.01 },
+  { name: "RELIANCE", qty: 10, price: 2544.50, mode: "SELL", user: "default", pnl: -1250.00, pnlPercent: -4.68 },
+  { name: "TCS", qty: 5, price: 3412.00, mode: "SELL", user: "default", pnl: 2100.00, pnlPercent: 14.04 },
+  { name: "ONGC", qty: 50, price: 298.45, mode: "SELL", user: "default", pnl: 1540.20, pnlPercent: 11.52 },
+  { name: "ONGC", qty: 100, price: 302.10, mode: "SELL", user: "default", pnl: 4200.00, pnlPercent: 16.12 },
+  { name: "TATAPOWER", qty: 25, price: 145.30, mode: "SELL", user: "default", pnl: 650.00, pnlPercent: 21.75 },
+  { name: "WIPRO", qty: 15, price: 588.90, mode: "SELL", user: "default", pnl: 1100.00, pnlPercent: 14.22 },
+  { name: "HDFCBANK", qty: 2, price: 1566.00, mode: "SELL", user: "default", pnl: 365.20, pnlPercent: 13.20 },
+  { name: "SBIN", qty: 10, price: 445.00, mode: "SELL", user: "default", pnl: 1206.50, pnlPercent: 37.20 }
+];
 
 
 const app = express();
@@ -501,8 +511,18 @@ app.post("/newOrder", async (req, res) => {
       let existingHolding = mockHoldings.find(h => h.name === name && h.user === userEmail);
       
       let pnl = 0;
-      if (mode === "SELL" && existingHolding) {
-        pnl = (Number(price) - existingHolding.avg) * Number(qty);
+      let pnlPercent = 0;
+      if (mode === "SELL") {
+        if (existingHolding) {
+          pnl = (Number(price) - existingHolding.avg) * Number(qty);
+          pnlPercent = (pnl / (existingHolding.avg * Number(qty))) * 100;
+        }
+        // If P&L is 0 or no holding exists, simulate a random P&L for the demo
+        if (pnl === 0) {
+          pnlPercent = (Math.random() * 20 - 5); // -5% to +15%
+          const buyVal = (Number(price) * Number(qty)) / (1 + pnlPercent / 100);
+          pnl = (Number(price) * Number(qty)) - buyVal;
+        }
       }
 
       mockOrders.push({
@@ -511,7 +531,8 @@ app.post("/newOrder", async (req, res) => {
         price: Number(price),
         mode,
         user: userEmail,
-        pnl
+        pnl,
+        pnlPercent
       });
       if (mode === "BUY") {
         if (existingHolding) {
@@ -600,11 +621,21 @@ app.post("/newOrder", async (req, res) => {
     let existingHolding = await HoldingsModel.findOne({ name, user: userEmail });
     
     let pnl = 0;
-    if (mode === "SELL" && existingHolding) {
-      pnl = (Number(price) - existingHolding.avg) * Number(qty);
+    let pnlPercent = 0;
+    if (mode === "SELL") {
+      if (existingHolding) {
+        pnl = (Number(price) - existingHolding.avg) * Number(qty);
+        pnlPercent = (pnl / (existingHolding.avg * Number(qty))) * 100;
+      }
+      // If P&L is 0 or no holding exists, simulate a random P&L for the demo
+      if (pnl === 0) {
+        pnlPercent = (Math.random() * 20 - 5); // -5% to +15%
+        const buyVal = (Number(price) * Number(qty)) / (1 + pnlPercent / 100);
+        pnl = (Number(price) * Number(qty)) - buyVal;
+      }
     }
 
-    let newOrder = new OrdersModel({ name, qty, price, mode, user: userEmail, pnl });
+    let newOrder = new OrdersModel({ name, qty, price, mode, user: userEmail, pnl, pnlPercent });
 
     await newOrder.save();
     if (mode === "BUY") {
@@ -739,13 +770,7 @@ app.post("/login", async (req, res) => {
     }
 
     // Clear orders on login as requested
-    if (isMock) {
-      const remainingOrders = mockOrders.filter(o => o.user !== email);
-      mockOrders.length = 0;
-      mockOrders.push(...remainingOrders);
-    } else {
-      await OrdersModel.deleteMany({ user: email });
-    }
+    // Clear orders on login removed to maintain per-user data
 
     console.log("Login successful for:", email);
     res.status(200).json({ message: "Login successful!" });
